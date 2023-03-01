@@ -2,7 +2,11 @@ from typing import List
 
 from server.settings import settings
 
-MODELS_MODULES: List[str] = ["server.db.models.dummy_model"]  # noqa: WPS407
+MODELS_MODULES: List[str] = [
+    "server.db.models.user_model",
+    "server.db.models.deal_model",
+    "server.db.models.chat_model",
+]  # noqa: WPS407
 
 TORTOISE_CONFIG = {  # noqa: WPS407
     "connections": {

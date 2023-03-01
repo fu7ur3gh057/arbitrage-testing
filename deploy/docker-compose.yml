@@ -3,35 +3,37 @@ version: '3.9'
 services:
   api:
     build:
-      context: .
-      dockerfile: ./deploy/Dockerfile
+      context: ../
+      dockerfile: deploy/Dockerfile
     image: server:${SERVER_VERSION:-latest}
     restart: always
     env_file:
-    - .env
+      - ../.env
     depends_on:
       db:
         condition: service_healthy
     environment:
       SERVER_HOST: 0.0.0.0
-      SERVER_DB_HOST: server-db
+      SERVER_DB_HOST: db
       SERVER_DB_PORT: 5432
-      SERVER_DB_USER: server
-      SERVER_DB_PASS: server
-      SERVER_DB_BASE: server
+      SERVER_DB_USER: postgres
+      SERVER_DB_PASS: 1234
+      SERVER_DB_BASE: arb_server
+    ports:
+      - "8000:8000"
 
   db:
     image: postgres:13.8-bullseye
     hostname: server-db
     environment:
-      POSTGRES_PASSWORD: "server"
-      POSTGRES_USER: "server"
-      POSTGRES_DB: "server"
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "arb_server"
     volumes:
-    - server-db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: pg_isready -U server
+      test: pg_isready -U postgres
       interval: 2s
       timeout: 3s
       retries: 40
@@ -41,17 +43,29 @@ services:
     restart: "no"
     command: aerich upgrade
     environment:
-      SERVER_DB_HOST: server-db
+      SERVER_DB_HOST: db
       SERVER_DB_PORT: 5432
-      SERVER_DB_USER: server
-      SERVER_DB_PASS: server
-      SERVER_DB_BASE: server
+      SERVER_DB_USER: postgres
+      SERVER_DB_PASS: 1234
+      SERVER_DB_BASE: arb_server
     depends_on:
       db:
         condition: service_healthy
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: pgadmin4_container
+#    restart: always
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: raj@nola.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
 
 
 
 volumes:
-  server-db-data:
-    name: server-db-data
+  db-data:
+    name: db-data
+  pgadmin-data:

@@ -1,8 +1,7 @@
 from fastapi.routing import APIRouter
 
-from server.web.api import dummy, echo, monitoring
+from server.web.api import users, deals
 
 api_router = APIRouter()
-api_router.include_router(monitoring.router)
-api_router.include_router(echo.router, prefix="/echo", tags=["echo"])
-api_router.include_router(dummy.router, prefix="/dummy", tags=["dummy"])
+api_router.include_router(users.views.router, prefix="/users", tags=["users"])
+api_router.include_router(deals.views.router, prefix="/deals", tags=["deals"])

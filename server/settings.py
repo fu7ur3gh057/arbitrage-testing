@@ -42,9 +42,9 @@ class Settings(BaseSettings):
     # Variables for the database
     db_host: str = "localhost"
     db_port: int = 5432
-    db_user: str = "server"
-    db_pass: str = "server"
-    db_base: str = "server"
+    db_user: str = "postgres"
+    db_pass: str = "1234"
+    db_base: str = "arb_server1"
     db_echo: bool = False
 
     @property

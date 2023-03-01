@@ -36,6 +36,7 @@ def get_app() -> FastAPI:
     register_tortoise(
         app,
         config=TORTOISE_CONFIG,
+        generate_schemas=True,
         add_exception_handlers=True,
     )
 
